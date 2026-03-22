@@ -1,0 +1,156 @@
+repeat task.wait() until game:IsLoaded()
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "JLightCandyFarm"
+gui.Parent = game.CoreGui
+
+local frame = Instance.new("Frame")
+frame.Parent = gui
+frame.Size = UDim2.new(0,200,0,150)
+frame.Position = UDim2.new(0.5,-100,0.5,-75)
+frame.BackgroundColor3 = Color3.fromRGB(180,120,255)
+frame.Active = true
+frame.Draggable = true
+
+Instance.new("UICorner", frame)
+
+local title = Instance.new("TextLabel")
+title.Parent = frame
+title.Size = UDim2.new(1,0,0,30)
+title.BackgroundTransparency = 1
+title.Text = "JLight Candy Farm"
+title.TextScaled = true
+title.TextColor3 = Color3.fromRGB(255,200,255)
+
+
+
+local button = Instance.new("TextButton")
+button.Parent = frame
+button.Size = UDim2.new(0.8,0,0,35)
+button.Position = UDim2.new(0.1,0,0.3,0)
+button.Text = "Egg Farm OFF"
+button.BackgroundColor3 = Color3.fromRGB(255,150,255)
+button.TextScaled = true
+
+Instance.new("UICorner", button)
+
+
+
+
+local zoneButton = Instance.new("TextButton")
+zoneButton.Parent = frame
+zoneButton.Size = UDim2.new(0.8,0,0,35)
+zoneButton.Position = UDim2.new(0.1,0,0.65,0)
+zoneButton.Text = "TP Zone"
+zoneButton.BackgroundColor3 = Color3.fromRGB(255,180,255)
+zoneButton.TextScaled = true
+
+Instance.new("UICorner", zoneButton)
+
+
+local farming = false
+
+
+
+local function tpEggs(root)
+
+	local function tpToMe(obj)
+
+		if obj:IsA("BasePart") then
+			obj.CFrame = root.CFrame
+
+		elseif obj:IsA("Model") then
+			local part = obj:FindFirstChildWhichIsA("BasePart")
+			if part then
+				part.CFrame = root.CFrame
+			end
+		end
+
+	end
+
+
+	for _, v in pairs(workspace:GetChildren()) do
+
+		if v.Name == "CandyEgg" then
+			for _, egg in pairs(v:GetChildren()) do
+				tpToMe(egg)
+			end
+		end
+
+		if tostring(v):lower():find("egg")
+		or tostring(v):lower():find("candy")
+		or tostring(v):lower():find("collect") then
+			tpToMe(v)
+		end
+
+	end
+
+end
+
+
+
+local function tpZone(root)
+
+	local zone = workspace
+	:WaitForChild("Interiors")
+	:WaitForChild("MainMap!Sugarfest2026")
+	:WaitForChild("Event")
+	:WaitForChild("Sugarfest")
+	:WaitForChild("ChocolateRiver")
+	:WaitForChild("CollectionZone")
+	:WaitForChild("ZoneModel")
+
+	local part = zone:FindFirstChildWhichIsA("BasePart")
+
+	if part then
+		root.CFrame = part.CFrame
+	end
+
+end
+
+
+
+button.MouseButton1Click:Connect(function()
+
+	farming = not farming
+
+	if farming then
+
+		button.Text = "Egg Farm ON"
+
+		task.spawn(function()
+
+			while farming do
+
+				local char = player.Character or player.CharacterAdded:Wait()
+				local root = char:WaitForChild("HumanoidRootPart")
+
+				tpEggs(root)
+
+				task.wait(0.5)
+
+			end
+
+		end)
+
+	else
+
+		button.Text = "Egg Farm OFF"
+
+	end
+
+end)
+
+
+
+zoneButton.MouseButton1Click:Connect(function()
+
+	local char = player.Character or player.CharacterAdded:Wait()
+	local root = char:WaitForChild("HumanoidRootPart")
+
+	tpZone(root)
+
+end)
