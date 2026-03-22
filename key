@@ -355,7 +355,7 @@ Check.MouseButton1Click:Connect(function()
 		ScreenGui:Destroy()
 
 		loadstring(game:HttpGet(
-			"https://raw.githubusercontent.com/REDLOADSTRING/scripts/refs/heads/main/Protected_8122858654167284.lua.txt"
+			"https://raw.githubusercontent.com/REDLOADSTRING/scripts/refs/heads/main/adopt%20me%20candy"
 		))()
 
 	end
